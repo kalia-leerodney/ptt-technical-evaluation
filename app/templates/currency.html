@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<h2> Currency Converter </h2>
+
+
+<form action="{{ url_for('currency') }}" method="POST" enctype="multipart/form-data">
+    {{form.csrf_token}}
+    <div class="contact-group">
+        {{ form.currencynameone.label }}
+        {{ form.currencynameone(class='form-control',placeholder="CAD")}}
+    </div>
+
+    <div class="contact-group">
+        {{ form.currencyoneamount.label }}
+        {{ form.currencyoneamount(class='form-control',placeholder="3.00") }}
+    </div>
+
+    <div class="contact-group">
+        {{ form.currencynametwo.label }}
+        {{ form.currencynametwo(class='form-control',placeholder="USD")}}
+
+    </div>
+
+  
+
+   
+
+    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+    
+</form>
+
+<div class="result">
+    {{message}}
+</div>
+
+
+
+
+
+
+{% endblock %}

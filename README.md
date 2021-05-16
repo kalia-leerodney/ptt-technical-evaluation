@@ -1,12 +1,14 @@
-# Lab 6 - VueJS
+# Code
 
-The goal of this lab is to become familiar with VueJS.
 
-Remember to always create a virtual environment and install the packages in your requirements file
 
-```bash
-$ python -m venv venv (you may need to use python3 instead)
-$ source venv/bin/activate (or .\venv\Scripts\activate on Windows)
-$ pip install -r requirements.txt 
-$ python run.py
-```
+To begin using this app you can do the following:
+
+1. Clone the repository to your local machine.
+2. Create a Python virtual environment e.g. `python -m venv venv` (You may need to use `python3` instead)
+3. Enter the virtual environment using `source venv/bin/activate` (or `.\venv\Scripts\activate` on Windows)
+4. Install the dependencies using Pip. e.g. `pip install -r requirements.txt`. 
+5. Start the development server using `python run.py`
+
+## Separate Config file
+

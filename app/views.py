@@ -5,30 +5,115 @@ Werkzeug Documentation:  http://werkzeug.pocoo.org/documentation/
 This file creates your application.
 """
 
-from app import app
+from app import app, db, login_manager
 from flask import render_template, request, redirect, url_for, flash
+from flask_login import login_user, logout_user, current_user, login_required
+from app.forms import LoginForm,RegisterForm,CurrencyForm
+from app.models import UserProfile
 
+import requests
+import json
+ 
+
+ 
 
 ###
 # Routing for your application.
 ###
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def index(path):
-    """
-    Because we use HTML5 history mode in vue-router we need to configure our
-    web server to redirect all routes to index.html. Hence the additional route
-    "/<path:path".
+@app.route('/')
+def home():
+    url = "http://data.fixer.io/api/latest?access_key=8101cee3f3965bec2489c634687e60bd"
+ 
+    response = requests.get(url)
+    data = response.text
+    #print(data)
+    parsed = json.loads(data)
+    date = parsed["date"]
+    
+    """Render website's home page."""
+    return render_template('home.html')
 
-    Also we will render the initial webpage and then let VueJS take control.
-    """
-    return app.send_static_file('index.html')
 
+@app.route('/about/')
+def about():
+    """Render the website's about page."""
+    return render_template('about.html')
+
+@app.route('/register',methods=["GET","POST"])
+def register():
+    #date = parsed["date"]
+    form = RegisterForm()
+    print("Sent2")
+    if request.method == "POST":
+        #print("Sent")
+        firstname = form.firstname.data
+        lastname = request.form['lastname']
+        email = request.form['email']
+        currencyone = request.form['currencyone']
+        #print(currencyone)
+        currencytwo = request.form['currencyone']
+        #print("Success")
+        return redirect(url_for('displaycurrencies'))
+    return render_template('register.html',form=form)
+
+@app.route('/displaycurrencies')
+def displaycurrencies():
+    url = "http://data.fixer.io/api/latest?access_key=8101cee3f3965bec2489c634687e60bd"
+    response = requests.get(url)
+    data = response.text
+    #print(data)
+    parsed = json.loads(data)
+    allrates = parsed["rates"].items()
+    #print(allrates)
+    return render_template('displaycurrencies.html',allrates=allrates)
+    
+@app.route('/currency',methods=["GET","POST"])
+def currency():
+    url = "http://data.fixer.io/api/latest?access_key=8101cee3f3965bec2489c634687e60bd"
+    response = requests.get(url)
+    data = response.text
+    #print(data)
+    parsed = json.loads(data)
+    allrates = parsed["rates"]
+    #print(allrates)
+    message = " "
+    form = CurrencyForm()
+    if request.method == "POST":
+        currencynameone = form.currencynameone.data
+        currencyoneamount = form.currencyoneamount.data
+        currencynametwo = form.currencynametwo.data
+        
+        one = allrates[currencynameone]
+        two = allrates[currencynametwo]
+        #print(one)
+
+
+        if currencynameone != "EUR":
+            currencytwoamount = float(currencyoneamount) / float(one)
+            message = currencyoneamount + " " + currencynameone + " = " + str(currencytwoamount) + " " + currencynametwo
+        
+        else:
+            currencytwoamount = float(currencyoneamount) * float(two)
+            message = currencyoneamount + " " + currencynameone + " = " + str(currencytwoamount) + " " + currencynametwo
+        #print(currencynameone)
+        #print(currencyoneamount)
+        #return redirect(url_for('home'))
+    return render_template('currency.html',form=form, message=message)
+        
+
+
+
+# user_loader callback. This callback is used to reload the user object from
+# the user ID stored in the session
+@login_manager.user_loader
+def load_user(id):
+    return UserProfile.query.get(int(id))
 
 ###
 # The functions below should be applicable to all Flask apps.
 ###
+
 
 @app.route('/<file_name>.txt')
 def send_text_file(file_name):
@@ -41,8 +126,7 @@ def send_text_file(file_name):
 def add_header(response):
     """
     Add headers to both force latest IE rendering engine or Chrome Frame,
-    and also tell the browser not to cache the rendered page. If we wanted
-    to we could change max-age to 600 seconds which would be 10 minutes.
+    and also to cache the rendered page for 10 minutes.
     """
     response.headers['X-UA-Compatible'] = 'IE=Edge,chrome=1'
     response.headers['Cache-Control'] = 'public, max-age=0'

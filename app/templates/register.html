@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<h2> Contact Form </h2>
+
+
+<form action="{{ url_for('register') }}" method="POST" enctype="multipart/form-data">
+    {{form.csrf_token}}
+    <div class="contact-group">
+        {{ form.firstname.label }}
+        {{ form.firstname(class='form-control')}}
+    </div>
+
+    <div class="contact-group">
+        {{ form.lastname.label }}
+        {{ form.lastname(class='form-control') }}
+    </div>
+
+    <div class="contact-group">
+        {{ form.email.label }}
+        {{ form.email(class='form-control')}}
+
+    </div>
+
+    <div class="contact-group">
+        {{ form.currencyone.label }}
+        {{ form.currencyone(class='form-control',placeholder="USD")}}
+
+    </div>
+
+    <div class="contact-group">
+        {{ form.currencytwo.label }}
+        {{ form.currencytwo(class='form-control',placeholder="CAD") }}
+
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+    
+</form>
+
+
+
+
+
+
+{% endblock %}

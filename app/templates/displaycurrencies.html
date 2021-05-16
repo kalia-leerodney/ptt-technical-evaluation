@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block main %}
+
+<h1 class="heading"> All Currencies </h1>
+
+<div>
+   
+    <div id="table">
+        <table>
+            <tr>
+                <th>Currency Name</th>
+                <th>Amount</th>
+               
+              </tr>
+              {% for x,y in allrates%}
+            <tr>
+                <td>
+                    {{x}}
+                </td>
+
+                <td>
+                    {{y}}
+                </td>
+                
+                
+            </tr>
+            {% endfor %}
+    
+        </table>
+       
+    </div>
+
+    
+</div>
+
+
+
+
+
+{% endblock %}

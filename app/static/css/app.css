@@ -2,6 +2,34 @@ body {
     padding-top: 5rem;
 }
 
-footer  {
-    padding-top: 20px;
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+    
+  }
+
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+
+#table{
+    justify-content: center;
+}
+
+.heading{
+    text-align: center;
+}
+
+button{
+    margin-top:10px;
+}
+
+.result{
+    margin-top:20px;
+   
 }
